@@ -10,12 +10,14 @@ interface ConversationSidebarProps {
   currentConversationId: string | null;
   onSelectConversation: (id: string) => void;
   onNewConversation: () => void;
+  className?: string;
 }
 
 export default function ConversationSidebar({
   currentConversationId,
   onSelectConversation,
   onNewConversation,
+  className,
 }: ConversationSidebarProps) {
   const { data: conversations = [] } = useGetAllConversations();
   const deleteConversation = useDeleteConversation();
@@ -35,7 +37,7 @@ export default function ConversationSidebar({
   }
 
   return (
-    <div className="w-80 border-r border-border/50 backdrop-blur-xl bg-background/80 flex flex-col">
+    <div className={cn("w-80 border-r border-border/50 backdrop-blur-xl bg-background/80 flex flex-col", className)}>
       <div className="p-4 border-b border-border/50 flex items-center justify-between">
         <h2 className="font-semibold text-lg">Conversations</h2>
         <Button variant="ghost" size="icon" onClick={() => setIsCollapsed(true)} className="rounded-full">

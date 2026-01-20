@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
-import { Moon, Sun, Send, Code2, MessageSquare, Sparkles, Loader2 } from 'lucide-react';
+import { Moon, Sun, Send, Code2, MessageSquare, Sparkles, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -25,6 +25,7 @@ export default function ChatInterface() {
   const [inputMessage, setInputMessage] = useState('');
   const [isRileyThinking, setIsRileyThinking] = useState(false);
   const [activeTab, setActiveTab] = useState<'chat' | 'code'>('chat');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const startConversation = useStartConversation();
@@ -127,11 +128,34 @@ export default function ChatInterface() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <ConversationSidebar
-        currentConversationId={currentConversationId}
-        onSelectConversation={setCurrentConversationId}
-        onNewConversation={handleStartNewConversation}
-      />
+      <div className="hidden md:block">
+        <ConversationSidebar
+          currentConversationId={currentConversationId}
+          onSelectConversation={setCurrentConversationId}
+          onNewConversation={handleStartNewConversation}
+        />
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      <div
+        className={`fixed inset-y-0 left-0 z-50 w-80 transform transition-all duration-300 ease-in-out md:hidden ${isMobileMenuOpen ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'
+          }`}
+      >
+        <div className="h-[calc(100%-2rem)] w-[calc(100%-1rem)] m-4 rounded-2xl backdrop-blur-xl bg-background/60 border border-white/10 shadow-2xl overflow-hidden">
+          <ConversationSidebar
+            currentConversationId={currentConversationId}
+            onSelectConversation={(id) => {
+              setCurrentConversationId(id);
+              setIsMobileMenuOpen(false);
+            }}
+            onNewConversation={() => {
+              handleStartNewConversation();
+              setIsMobileMenuOpen(false);
+            }}
+            className="w-full h-full border-none bg-transparent"
+          />
+        </div>
+      </div>
 
       <div className="flex-1 flex flex-col relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5 pointer-events-none" />
@@ -146,6 +170,17 @@ export default function ChatInterface() {
         <header className="relative z-10 border-b border-border/50 backdrop-blur-xl bg-background/80">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden rounded-full bg-primary/10 hover:bg-primary/20 relative z-[60]"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                {isMobileMenuOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+              </Button>
+
+              {/* Mobile Sidebar Overlay Removed from Header */}
+
               <div className="relative">
                 <img
                   src="/assets/generated/riley-avatar-transparent.dim_200x200.png"

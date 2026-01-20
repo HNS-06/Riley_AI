@@ -44,7 +44,7 @@ export default function ChatMessage({ message }: ChatMessageProps) {
         )}
       </Avatar>
 
-      <div className={`flex-1 max-w-[80%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
+      <div className={`flex-1 max-w-[90%] md:max-w-[80%] lg:max-w-[70%] ${isUser ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-muted-foreground">{message.sender}</span>
           <span className="text-xs text-muted-foreground/60">
@@ -67,8 +67,8 @@ export default function ChatMessage({ message }: ChatMessageProps) {
 
         <Card
           className={`p-4 ${isRiley
-              ? 'bg-gradient-to-br from-card to-card/50 border-primary/20'
-              : 'bg-gradient-to-br from-accent/10 to-accent/5 border-accent/20'
+            ? 'bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20 shadow-md shadow-primary/5'
+            : 'bg-gradient-to-br from-muted/50 to-muted/30 border-border/50'
             } ${message.isCodeSnippet ? 'font-mono text-sm' : ''} w-full`}
         >
           {isEditing ? (
